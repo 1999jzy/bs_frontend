@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import HeaderBar from './common/HeaderBar'
-import { Layout, Breadcrumb,message } from 'antd';
+import SiderMenu from './component/SiderMenu'
+import { Layout, Breadcrumb, message } from 'antd';
 import history from '../src/common/history'
+import {Route, Switch } from 'react-router-dom';
 import 'antd/dist/antd.css';
+import Userinfo from './component/Userinfo';
 
 const { Content, Footer } = Layout;
 
@@ -24,18 +27,29 @@ class User extends Component {
             <div className="Home">
                 <Layout style={{ minHeight: '100vh' }}>
                     <HeaderBar username={name} logout={this.logout} />
+                    <Layout>
+                        <SiderMenu />
+                        <Layout>
+                            <Content style={{ padding: '0 50px' }}>
+                                <Breadcrumb style={{ margin: '16px 0' }}>
+                                    <Breadcrumb.Item>User</Breadcrumb.Item>
+                                </Breadcrumb>
+                                <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+                                    <Switch>
+                                        <Route exact path='/user' component={Userinfo} />
+                                        <Route exact path='/user/info' component={Userinfo} />
+                                        {/* <Route exact path='/app/search' component={SearchStock} />
+                                        <Route exact path='/app/myfund' component={MyFund} />
+                                        <Route exact path='/app/mystock' component={MyStock} />
+                                        <Route exact path='/app/buystock' component={BuyStock} />
+                                        <Route exact path='/app/sellstock' component={SellStock} /> */}
+                                    </Switch>
+                                </div>
+                            </Content>
 
-                    <Content style={{ padding: '0 50px' }}>
-                        <Breadcrumb style={{ margin: '16px 0' }}>
-                            <Breadcrumb.Item>User</Breadcrumb.Item>
-                        </Breadcrumb>
-                        <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                            
-                        </div>
-                    </Content>
-
-                    <Footer style={{ textAlign: 'center' }}>BS©2019 Created by jzy</Footer>
-
+                            <Footer style={{ textAlign: 'center' }}>BS©2019 Created by jzy</Footer>
+                        </Layout>
+                    </Layout>
                 </Layout>
             </div>
         );

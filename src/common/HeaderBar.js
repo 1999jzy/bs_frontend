@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Menu, Layout, Icon , message} from 'antd';
 import history from './history';
 import { Link } from 'react-router-dom'
+//import '../css/Header.css'
 
 const { Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -32,7 +33,9 @@ class HeaderBar extends Component {
 
     render() {
         return (
-            <Header style={{ background: '#fff', padding: 0 }}>
+            <Header style={{position: "relative",
+                background: "#fff",
+                boxShadow: "0px 3px 8px rgb(123, 162, 202)"}}>
                 {/* <Menu mode="horizontal"
                     style={{ lineHeight: '64px', width: '64px', float: 'left', marginLeft: '40px' }}>
                     <Link to="/home" style={{float: 'left', marginLeft: '18px'}}>主页</Link>
