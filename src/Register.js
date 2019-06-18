@@ -2,6 +2,8 @@ import {
     Form, Icon, Input, Button, message
 } from 'antd';
 import React, { Component } from 'react';
+import axios from 'axios';
+import { api } from './config.json'
 
 class RegisterForm extends Component {
     constructor(props) {
@@ -19,10 +21,29 @@ class RegisterForm extends Component {
                 console.log("register sucess")
                 //localStorage.setItem('userinfo', JSON.stringify(values));
                 //console.log(localStorage.getItem('userinfo'))
-                message.success("成功注册")
-                setTimeout(() => {
-                    this.props.history.push({ pathname: '/login', state: values });
-                }, 200);
+                axios.post(api + "/api/register", {
+                    username: values.user_id,
+                    password: values.password,
+                    email: values.email
+                }).then(response => {
+                    console.log(response);
+                    let data = response.data;
+                    if (data.status === 1) {
+                        message.success(data.msg)
+                        setTimeout(() => {
+                            this.props.history.push({ pathname: '/login', state: values });
+                        }, 200);
+                    }
+                    else if (data.status === -1) {
+                        message.error(data.msg)
+                    }
+                }).catch(error => {
+                    console.log("Error in register:", error);
+                })
+                // message.success("成功注册")
+                // setTimeout(() => {
+                //     this.props.history.push({ pathname: '/login', state: values });
+                // }, 200);
             }
             else {
                 console.log("register fail")
@@ -110,6 +131,7 @@ class RegisterForm extends Component {
                         rules: [
                             {
                                 required: true,
+                                min: 6,
                                 message: 'Please input your password!',
                             },
                             {
@@ -135,7 +157,8 @@ class RegisterForm extends Component {
                     <Button type="primary" htmlType="submit">
                         Register
                     </Button>
-                    <a href = "/login"> Have an account? </a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="/login"> Have an account? </a>
                 </Form.Item>
             </Form>
         )

@@ -5,6 +5,8 @@ import Home from '../Home'
 import LoginForm from '../Login'
 import RegisterForm from '../Register'
 import User from '../User'
+import Bookshow from '../Bookshow'
+import Bookbuy from '../Bookbuy'
 
 class MyRoute extends Component {
     render() {
@@ -16,6 +18,8 @@ class MyRoute extends Component {
                     <Route path='/register' component={RegisterForm}/>
                     <Route path="/home" component={Home} />
                     <Route path="/user" component={User}/>
+                    <Route path="/bookshow" component={Bookshow}/>
+                    <Route path="/bookbuy" component={Bookbuy}/>
                 </Switch>
             </Router>
         );

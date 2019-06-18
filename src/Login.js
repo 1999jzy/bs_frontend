@@ -3,6 +3,8 @@ import {
 } from 'antd';
 import React, { Component } from 'react';
 import '../src/css/LoginForm.css';
+import axios from 'axios';
+import { api } from './config.json'
 
 class LoginForm extends Component {
     // constructor(props) {
@@ -16,10 +18,24 @@ class LoginForm extends Component {
                 console.log("login sucess")
                 localStorage.setItem('userinfo', JSON.stringify(values));
                 //console.log(localStorage.getItem('userinfo'))
-                message.success("成功登录")
-                setTimeout(() => {
-                    this.props.history.push({pathname:'/home', state: values});
-                }, 200);
+                axios.post(api + "/api/login", {
+                    username: values.user_id,
+                    password: values.login_pwd,
+                }).then(response => {
+                    console.log(response);
+                    let data = response.data;
+                    if (data.status === 1) {
+                        message.success(data.msg)
+                        setTimeout(() => {
+                            this.props.history.push({ pathname: '/home', state: values });
+                        }, 200);
+                    }
+                    else if (data.status === -1) {
+                        message.error(data.msg)
+                    }
+                }).catch(error => {
+                    console.log("Error in login:", error);
+                })
             }
             else {
                 console.log("login fail")

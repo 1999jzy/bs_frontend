@@ -6,6 +6,7 @@ import history from '../src/common/history'
 import {Route, Switch } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import Userinfo from './component/Userinfo';
+import BookAdd from './component/BookAdd'
 
 const { Content, Footer } = Layout;
 
@@ -38,11 +39,8 @@ class User extends Component {
                                     <Switch>
                                         <Route exact path='/user' component={Userinfo} />
                                         <Route exact path='/user/info' component={Userinfo} />
-                                        {/* <Route exact path='/app/search' component={SearchStock} />
-                                        <Route exact path='/app/myfund' component={MyFund} />
-                                        <Route exact path='/app/mystock' component={MyStock} />
-                                        <Route exact path='/app/buystock' component={BuyStock} />
-                                        <Route exact path='/app/sellstock' component={SellStock} /> */}
+                                        <Route exact path='/user/addBook' component={BookAdd} />
+                                        
                                     </Switch>
                                 </div>
                             </Content>

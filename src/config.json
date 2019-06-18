@@ -2,5 +2,6 @@
     "Accesskey":"F0SNNKuRF9Db8j4ZxV7EsEl_5ZMPvGp_lO_nx0UL",
     "Secretkey":"-2Ozy5wFke0aSrytnIHQ93HVG5d6cYLAj6sSuROV",
     "bucket":"bs",
-    "publicBucketDomain":"pt3nbl17y.bkt.clouddn.com"
+    "publicBucketDomain":"pt3nbl17y.bkt.clouddn.com",
+    "api":"http://localhost:8080"
 }
