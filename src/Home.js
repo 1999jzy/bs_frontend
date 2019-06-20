@@ -25,7 +25,7 @@ class Home extends Component {
     return (
       <div className="Home">
         <Layout style={{ minHeight: '100vh' }}>
-          <HeaderBar username={name} logout={this.logout}/>
+          <HeaderBar username={name} logout={this.logout} />
 
           <Content style={{ padding: '0 50px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
@@ -33,6 +33,8 @@ class Home extends Component {
             </Breadcrumb>
             <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
               <SearchForm />
+              <hr style={{ width: "100%", color: "#987cb9", size: "10", filter: "alpha(opacity=100,finishopacity=0,style=2)" }} />
+              <h1>最新上架</h1>
               <BooksAll />
             </div>
           </Content>

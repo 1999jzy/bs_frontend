@@ -11,8 +11,13 @@ const { Option } = Select;
 class Bookbuy extends Component {
     constructor(props) {
         super(props);
-        var { bookid } = this.props.location.state;
-        bookid = bookid.toString()
+        if (this.props.location.state) {
+            var { bookid } = this.props.location.state;
+            bookid = bookid.toString()
+        }
+        else{
+            bookid = "0"
+        }
         this.state = {
             user_id: JSON.parse(localStorage.getItem('userinfo')).user_id,
             bookid: bookid,
@@ -48,7 +53,7 @@ class Bookbuy extends Component {
                     priceNow: data.priceNow,
                     priceOri: data.priceOri,
                     state: data.state,
-                    username: data.username
+                    username: data.userName
                 })
             })
             .catch(error => {
@@ -70,6 +75,25 @@ class Bookbuy extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log(values);
+                if (this.state.user_id === this.state.username) {
+                    message.warn("你不能购买你自己的书籍")
+                }
+                else {
+                    axios.post(api + "/api/orderCreate", {
+                        bookid: this.state.bookid,
+                        bookname: this.state.bookName,
+                        buyer: this.state.user_id,
+                        seller: this.state.username,
+                        ordertype: values.choice,
+                        address: values.address
+                    })
+                        .then(response => {
+                            console.log(response)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                }
             }
         })
     }
@@ -104,7 +128,7 @@ class Bookbuy extends Component {
                                         <Card
                                             hoverable
                                             style={{ width: 240 }}
-                                            cover={<img alt="example" src={this.state.pic ? this.state.pic : "http://psx59ycao.bkt.clouddn.com/35574339ab3c813.jpg"} />}
+                                            cover={<img alt="example" src={this.state.pic ? this.state.pic : "statics/empty.jpg"} />}
                                         >
                                             <Meta title={this.state.bookName} description={
                                                 <div>
@@ -132,12 +156,12 @@ class Bookbuy extends Component {
                                         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                                             <Form.Item label="交易方式">{
                                                 getFieldDecorator('choice', {
-                                                    initialValue: 1,
+                                                    initialValue: "1",
                                                     rules: [{ required: true, message: '请选择！' }],
                                                 })(
                                                     <Select style={{ maxWidth: 200 }}>
-                                                        <Option value={1}>线上交易</Option>
-                                                        <Option value={2}>邮寄</Option>
+                                                        <Option value={"1"}>线下交易</Option>
+                                                        <Option value={"2"}>邮寄</Option>
                                                     </Select>
                                                 )
                                             }
@@ -150,7 +174,7 @@ class Bookbuy extends Component {
                                                 )}
                                             </Form.Item>
                                             <Form.Item>
-                                                <Button type="primary" disabled={this.state.state !== 0} htmlType="submit" style={{margin:"0 72%"}}>
+                                                <Button type="primary" disabled={this.state.state !== 0} htmlType="submit" style={{ margin: "0 72%" }}>
                                                     {this.state.state ? "已售出" : "购买"}
                                                 </Button>
                                             </Form.Item>

@@ -92,7 +92,7 @@ class Bookshow extends Component {
                                         <Card
                                             hoverable
                                             style={{ width: 240 }}
-                                            cover={<img alt="example" src={this.state.pic ? this.state.pic : "http://psx59ycao.bkt.clouddn.com/35574339ab3c813.jpg"} />}
+                                            cover={<img alt="example" src={this.state.pic ? this.state.pic : "statics/empty.jpg"} />}
                                         >
                                             <Meta title={this.state.bookName} description={
                                                 <div>
