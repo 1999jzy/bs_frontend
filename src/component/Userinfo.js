@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
 import { Row, Col, Upload, Avatar, message } from 'antd';
-import { Accesskey, Secretkey, bucket, publicBucketDomain} from '../config.json'
+import { api, Accesskey, Secretkey, bucket, publicBucketDomain } from '../config.json'
 import qiniu from 'qiniu';
+import axios from 'axios';
 
 class Userinfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: JSON.parse(localStorage.getItem('userinfo')).user_id,
             Accesskey: Accesskey,
             Secretkey: Secretkey,
             token: '',
             bucket: bucket,
             mac: '',
-            bucketManager:'',
-            imageUrl: ''
+            bucketManager: '',
+            imageUrl: '',
+            email: ''
         }
     }
 
@@ -29,7 +32,7 @@ class Userinfo extends Component {
         var config = new qiniu.conf.Config();
         var bucketManager = new qiniu.rs.BucketManager(mac, config);
         this.setState({
-            token:uploadToken,
+            token: uploadToken,
             mac: mac,
             bucketManager: bucketManager
         })
@@ -40,8 +43,23 @@ class Userinfo extends Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        axios.post(api+"/api/init", {
+            username: this.state.username,
+        })
+        .then(response => {
+            console.log(response)
+            let data = response.data
+            this.setState({
+                imageUrl: data.face,
+                email: data.email
+            })
+        })
+        .catch(error => {
+            console.log(error)
+        })
         this.getToken();
+
     }
 
     beforeUpload = (file) => {
@@ -51,7 +69,7 @@ class Userinfo extends Component {
         }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
-           message.error('Image must smaller than 2MB!')
+            message.error('Image must smaller than 2MB!')
         }
         return isJPG && isLt2M
     }
@@ -66,6 +84,16 @@ class Userinfo extends Component {
             console.log(Url);
             this.setState({
                 imageUrl: Url
+            })
+            axios.post(api+"/api/changeAva", {
+                username: this.state.username,
+                pic: Url
+            })
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
             })
         }
         //console.log(this.imageUrl);
@@ -97,12 +125,12 @@ class Userinfo extends Component {
                         <br>
                         </br>
                         <Row>
-                            <p>用户名：zju_jzy</p>
+                            <p>用户名：{this.state.username}</p>
                         </Row>
                         <br>
                         </br>
                         <Row>
-                            <p>邮箱：{"1148464672@qq.com"}</p>
+                            <p>邮箱：{this.state.email}</p>
                         </Row>
                         <br>
                         </br>

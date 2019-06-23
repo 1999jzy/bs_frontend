@@ -3,5 +3,6 @@
     "Secretkey":"-2Ozy5wFke0aSrytnIHQ93HVG5d6cYLAj6sSuROV",
     "bucket":"bs",
     "publicBucketDomain":"pt3nbl17y.bkt.clouddn.com",
-    "api":"http://localhost:8080"
+    "api":"http://localhost:8080",
+    "wsUrl":"ws://localhost:8080/websocket/"
 }

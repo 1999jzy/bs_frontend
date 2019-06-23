@@ -3,10 +3,13 @@ import HeaderBar from './common/HeaderBar'
 import SiderMenu from './component/SiderMenu'
 import { Layout, Breadcrumb, message } from 'antd';
 import history from '../src/common/history'
-import {Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import Userinfo from './component/Userinfo';
 import BookAdd from './component/BookAdd'
+import Mybuy from './component/Mybuy';
+import Mysell from './component/MySell';
+import Chatlist from './component/Chatlist';
 
 const { Content, Footer } = Layout;
 
@@ -25,7 +28,7 @@ class User extends Component {
             name = JSON.parse(localStorage.getItem('userinfo')).user_id;
         }
         return (
-            <div className="Home">
+            <div className="User">
                 <Layout style={{ minHeight: '100vh' }}>
                     <HeaderBar username={name} logout={this.logout} />
                     <Layout>
@@ -40,7 +43,9 @@ class User extends Component {
                                         <Route exact path='/user' component={Userinfo} />
                                         <Route exact path='/user/info' component={Userinfo} />
                                         <Route exact path='/user/addBook' component={BookAdd} />
-                                        
+                                        <Route exact path='/user/myBuy' component={Mybuy} />
+                                        <Route exact path='/user/mySell' component={Mysell} />
+                                        <Route exact path='/user/myMsg' component={Chatlist} />
                                     </Switch>
                                 </div>
                             </Content>

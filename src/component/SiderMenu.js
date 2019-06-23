@@ -41,6 +41,9 @@ class SiderMenu extends Component {
                         <Menu.Item key="/user/mySell">
                             <Link to='/user/mySell'><span>我卖出的</span></Link>
                         </Menu.Item>
+                        <Menu.Item key="/user/myMsg">
+                            <Link to='/user/myMsg'><span>我的消息</span></Link>
+                        </Menu.Item>
                     </SubMenu>
                     <Menu.Item key="7">
                         <Icon type="setting" />
