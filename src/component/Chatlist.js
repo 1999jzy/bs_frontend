@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { wsUrl } from '../config.json'
-import { Button, Row, Col, Form, Input, Comment, Icon, List, message } from 'antd';
+import { Button, Row, Col, Form, Input, Comment, Icon, List, message, Avatar } from 'antd';
 import axios from 'axios';
 import { api } from '../config.json'
+import moment from 'moment'
 
 class Chatlist extends Component {
     constructor(props) {
@@ -14,7 +15,10 @@ class Chatlist extends Component {
             chatmsg: [],
             curchat: '',
             visible: false,
-            msg: ''
+            msg: '',
+            ava: '',
+            anotherAva: '',
+            avaUsername: ''
         }
     }
 
@@ -31,6 +35,22 @@ class Chatlist extends Component {
             visible: false,
         });
     };
+
+    componentWillMount() {
+        axios.post(api + "/api/init", {
+            username: this.state.username,
+        })
+            .then(response => {
+                console.log(response)
+                let data = response.data
+                this.setState({
+                    ava: data.face,
+                })
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
 
     componentDidMount() {
         axios.post(api + "/api/chatList", {
@@ -58,7 +78,17 @@ class Chatlist extends Component {
         }
 
         ws.onmessage = (evt) => {
-            console.log(evt.data);
+            const msg = JSON.parse(evt.data)
+            msg.time = moment(msg.time).format("YYYY-MM-DD HH:mm:ss")
+            console.log(msg)
+            if (msg.chatId === this.state.curchat) {
+                //console.log(msg.chatId + "," + this.state.curchat)
+                let chatMsg = this.state.chatmsg
+                chatMsg.push(msg)
+                this.setState({
+                    chatmsg: chatMsg
+                })
+            }
         }
 
         ws.onclose = () => {
@@ -70,8 +100,20 @@ class Chatlist extends Component {
         })
     }
 
+    scrollToBottom = () => {
+        var div = document.getElementById('msgarea');
+        div.scrollTop = div.scrollHeight
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
     componentWillUnmount() {
         this.state.ws.close()
+        this.setState({
+            curchat: ''
+        })
     }
 
     handleSubmit = (e) => {
@@ -101,6 +143,11 @@ class Chatlist extends Component {
             message.error("请选择聊天对象")
             return
         }
+
+        if (!this.state.msg) {
+            message.warn("请输入聊天信息")
+            return
+        }
         var msg = JSON.stringify({
             chatid: this.state.curchat,
             sender: this.state.username,
@@ -120,7 +167,7 @@ class Chatlist extends Component {
         return (
             <div>
                 <Row>
-                    <Col span={6} style={{ textAlign: "center" }}>
+                    <Col span={6}>
                         <Row>
                             <Form layout="inline" onSubmit={this.handleSubmit} style={{ textAlign: "center" }}>
                                 <Form.Item>{
@@ -143,26 +190,42 @@ class Chatlist extends Component {
                         <List
                             bordered={true}
                             itemLayout="horizontal"
-                            slot="renderItem"
                         >
                             {this.state.chatlist.map((item, index) => {
                                 return (
                                     <List.Item
-                                        key={item.chatid}
+                                        key={item.chatId}
                                         style={{
                                             padding: "10px",
-                                            background: "lightskyblue",
-                                            cursor: "pointer"
+                                            cursor: "pointer",
+                                            background: item.chatId === this.state.curchat ? "lightskyblue" : null
                                         }}
                                     >
                                         <List.Item.Meta
+                                            avatar={<Avatar src={item.face} />}
                                             onClick={() => {
-                                                console.log(item.chatid)
-                                                this.setState({
-                                                    curchat: item.chatid
+                                                console.log(item.chatId)
+                                                let chatMsg = []
+                                                axios.post(api + "/api/chatMsg", {
+                                                    chatId: item.chatId
                                                 })
+                                                    .then(response => {
+                                                        chatMsg = response.data
+                                                        console.log(chatMsg)
+                                                        this.setState({
+                                                            curchat: item.chatId,
+                                                            chatmsg: chatMsg,
+                                                            anotherAva: item.face,
+                                                            anotherUser: item.username
+                                                        })
+                                                    })
+                                                    .catch(error => {
+                                                        console.log(error)
+                                                    })
                                             }}
-                                            description={item.user === this.state.username ? item.anotherUser : item.user}
+                                            title={item.username}
+                                            description={item.email}
+
                                         >
                                         </List.Item.Meta>
                                     </List.Item>
@@ -170,10 +233,30 @@ class Chatlist extends Component {
                             })}
                         </List>
                     </Col>
-                    <Col span={18} style={{ textAlign: "center" }}>
+                    <Col span={1}>
+                        <div style={{ float: "left", width: "1px", height: "400px", background: "darkgray", marginLeft: "50px" }}></div>
+                    </Col>
+                    <Col span={17} >
                         <div id="msgarea" className="chat-box"
-                            style={{ height: "300px", overflow: "auto" }}
+                            style={{ height: "300px", overflow: "auto", marginLeft: "100px" }}
                         >
+                            {this.state.chatmsg.map((item, index) => {
+                                return (
+                                    <Comment key={item.msgId}
+                                        avatar={
+                                            <Avatar
+                                                src={item.sender === this.state.username ? this.state.ava : this.state.anotherAva}
+                                                alt="Han Solo"
+                                            />
+                                        }
+                                        content={item.content}
+                                        datetime={<span>{item.time}</span>}
+                                        author={<a>{item.sender}</a>}
+                                    >
+
+                                    </Comment>
+                                )
+                            })}
 
                         </div>
                         <Row>
@@ -186,7 +269,7 @@ class Chatlist extends Component {
                                         })
                                     }}
                                     onPressEnter={this.send}
-                                    style={{ paddingLeft: "200px" }}
+                                    style={{ paddingLeft: "100px" }}
                                     suffix={
                                         <Icon slot="suffix" onClick={this.send} type="caret-right" />
                                     }
