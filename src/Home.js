@@ -31,7 +31,7 @@ class Home extends Component {
             <Breadcrumb style={{ margin: '16px 0' }}>
               <Breadcrumb.Item>Home</Breadcrumb.Item>
             </Breadcrumb>
-            <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+            <div style={{ background: '#fff', padding: 24, minHeight: 280, marginLeft:"20%",marginRight:"20%" }}>
               <SearchForm />
               <hr style={{ width: "100%", color: "#987cb9", size: "10", filter: "alpha(opacity=100,finishopacity=0,style=2)" }} />
               <h1>最新上架</h1>

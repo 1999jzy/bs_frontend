@@ -44,6 +44,9 @@ class HeaderBar extends Component {
                     style={{ lineHeight: '64px', float: 'right', marginRight: '20px' }}
                 >
                     <Menu.Item >
+                        <Link to="/seek" >求购</Link>
+                    </Menu.Item>
+                    <Menu.Item >
                         <Link to="/home" >主页</Link>
                     </Menu.Item>
                     <SubMenu

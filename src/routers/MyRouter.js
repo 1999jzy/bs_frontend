@@ -7,6 +7,8 @@ import RegisterForm from '../Register'
 import User from '../User'
 import Bookshow from '../Bookshow'
 import Bookbuy from '../Bookbuy'
+import Seek from '../Seek';
+import SeekAll from '../component/SeekAll';
 
 class MyRoute extends Component {
     render() {
@@ -17,9 +19,11 @@ class MyRoute extends Component {
                     <Route path='/login' component={LoginForm}/>
                     <Route path='/register' component={RegisterForm}/>
                     <Route path="/home" component={Home} />
+                    <Route path='/seek' component={SeekAll}/>
                     <Route path="/user" component={User}/>
                     <Route path="/bookshow" component={Bookshow}/>
                     <Route path="/bookbuy" component={Bookbuy}/>
+                    <Route path="/bookseek" component={Seek}/>
                 </Switch>
             </Router>
         );

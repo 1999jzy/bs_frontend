@@ -28,21 +28,21 @@ class BooksAll extends Component {
     }
     render() {
         return (
-            <div style={{ background: '#ECECEC', padding: '30px' }}>
+            <div  style={{ background: '#ECECEC', padding: '30px' }}>
                 <Row gutter={16}>
                     {this.state.books.map((item, index) => {
                         return (
-                            <Col key={item.bookId} span={4}>
+                            <Col key={item.bookId} span={6}>
                                 <Card
                                     hoverable
-                                    cover={<img alt="example" src={item.pic ? item.pic : "statics/empty.jpg"} height="260px" width="100px"/>}
+                                    cover={<img alt="example" src={item.pic ? item.pic : "statics/empty.jpg"} height="260px" width="100px" />}
                                 >
                                     <Meta title={item.bookName}
-                                        description="www.instagram.com"
+                                        description={"￥" + item.priceOri}
                                         style={{ textAlign: "center" }}
-                                        onClick={() => { 
+                                        onClick={() => {
                                             console.log(item.bookId)
-                                            history.push({pathname: '/bookshow', state: {bookid: item.bookId}})
+                                            history.push({ pathname: '/bookshow', state: { bookid: item.bookId } })
                                         }}
                                     />
                                 </Card>
